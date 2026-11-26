@@ -1,4 +1,12 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+// Seguridad: Si no es admin (tipo 1), redirigir al menú comensal
+if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] != 1) {
+    header("Location: menu.php");
+    exit();
+}
 
 include('../modelo/conexiondb.php');
 
@@ -31,8 +39,10 @@ $total = mysqli_num_rows($query);
         <h3 class="bg-inverse fg-contrast-inverse" style="max-width: 19%">total de usuarios: <?= $total ?> </h3>
         <br>
         <a href="Formulario_usuario.php" class="btn-solid theme-success">Agregar Usuario</a>
-        <a href="menu.php" class="btn-solid theme-primary" style="margin-left: 10px;">Ver Menu Comensal</a>
-        <a href="../index.php" class="btn-solid theme-secondary" style="margin-left: 10px;">Cerrar sesion</a>
+        <a href="../vista/menu.php" class="btn-solid theme-primary" style="margin-left: 10px;">Ver Menu Comensal</a>
+        <a href="menuadmin.php" class="btn-solid theme-secondary" style="margin-left: 10px;">Ver tabla de productos</a>
+        <a href="reservacionesadmin.php" class="btn-solid theme-secondary" style="margin-left: 10px;">Ver tabla de reservaciones</a>
+        <a href="../index.php" class="btn-solid btn-styled theme-danger" style="margin-left: 10px;">Cerrar sesion</a>
         <br>
         <br>
         <table class="table table-bordered border-primary">

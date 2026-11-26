@@ -8,6 +8,7 @@ $con = conection();
 // Obtener el ID del usuario logueado en la sesion
 $id_user = $_SESSION['id_user'] ?? 1;
 $nombre_comensal = $_SESSION['nombre'] ?? '';
+$tipo_usuario = $_SESSION['tipo_usuario'] ?? 2;
 
 $mensaje = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reservar'])) {
@@ -50,8 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reservar'])) {
     <div style="max-width: 50%; margin: 0 auto; margin-bottom: 50px;">
         <h2 class="fs-3xl" style="text-align: center; color: #6f4e37;">🪑 Apartado de Reservacion de Mesas</h2>
         <br>
-        <div style="display: flex; justify-content: space-between;">
-            <a href="menu.php" class="btn-solid theme-primary"> <-- Volver al Menu </a>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <a href="menu.php" class="btn-solid theme-primary"> <-- Volver al Menu </a>
+                <?php if ($tipo_usuario == 1) { ?>
+                    <a href="dasboar.php" class="btn-solid theme-secondary" style="margin-left: 10px;"> Regresar al Dashboard </a>
+                <?php } ?>
+            </div>
             <a href="Verreservas.php" class="btn-solid theme-inverse"> Ver mis reservaciones --> </a>
         </div>
         <br>

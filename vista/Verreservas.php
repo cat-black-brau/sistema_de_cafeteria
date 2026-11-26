@@ -51,7 +51,12 @@ $total = mysqli_num_rows($query);
         </h2>
         <br>
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="menu.php" class="btn-solid theme-primary"> <-- Volver al Menu </a>
+            <div>
+                <a href="menu.php" class="btn-solid theme-primary"> <-- Volver al Menu </a>
+                <?php if ($tipo_usuario == 1) { ?>
+                    <a href="dasboar.php" class="btn-solid theme-secondary" style="margin-left: 10px;"> Regresar al Dashboard </a>
+                <?php } ?>
+            </div>
             <a href="reservas.php" class="btn-solid theme-success"> + Nueva Reservacion </a>
         </div>
         <br>
