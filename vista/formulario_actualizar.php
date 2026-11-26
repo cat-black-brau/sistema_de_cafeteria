@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
         echo 'Campos vacios';
     } else {
         //Buscamos al usuario en la base de datos con la id
-        $sql = "SELECT * FROM usuario WHERE id_user = '$id_user'";
+        $sql = "SELECT * FROM usuarios WHERE id_user = '$id_user'";
         $query = mysqli_query($con, $sql);
         $row = mysqli_fetch_assoc($query);
 
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
         $apellido = $row['apellido'];
         $correo = $row['email'];
         $contrasenia = $row['password'];
-        $tipo_usuario = $row['tipo_user'];
+        $tipo_usuario = $row['tipo_usuario'] ?? ($row['tipo_user'] ?? 2);
     }
 }
 ?>

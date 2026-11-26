@@ -24,15 +24,24 @@ class UsuarioP
         $email = mysqli_real_escape_string($con, $this->gmail);
         $password = mysqli_real_escape_string($con, $this->password);
 
-
         $sql = "SELECT * FROM usuarios WHERE email = '$email' AND password = '$password'";
         $query = mysqli_query($con, $sql);
 
         if ($query && mysqli_num_rows($query) > 0) {
             $row = mysqli_fetch_assoc($query);
+
+            // Iniciar sesion y guardar la informacion del usuario
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['id_user'] = $row['id_user'];
+            $_SESSION['nombre'] = $row['nombre'];
+            $_SESSION['apellido'] = $row['apellido'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
+
             mysqli_close($con);
 
-            // 2. Cambiado 'tipo_user' por 'tipo_usuario' (como esta en tu tabla pijessss )
             if ($row['tipo_usuario'] == 1) {
                 header("Location: ../vista/dasboar.php");
             } else if ($row['tipo_usuario'] == 2) {
@@ -54,7 +63,7 @@ class UsuarioP
     {
         include('../modelo/conexiondb.php');
         $con = conection();
-        $sql = "DELETE FROM usuario WHERE id_user =$id_user";
+        $sql = "DELETE FROM usuarios WHERE id_user =$id_user";
         $query = mysqli_query($con, $sql);
         if ($query) {
             if (mysqli_affected_rows($con) > 0) {
@@ -78,7 +87,7 @@ class UsuarioP
         include('../modelo/conexiondb.php');
         $con = conection();
 
-        $sql = "INSERT INTO usuario (nombre, apellido, email, password, tipo_user) 
+        $sql = "INSERT INTO usuarios (nombre, apellido, email, password, tipo_usuario) 
                 VALUES ('$nombre', '$apellido', '$email', '$password', '$tipo_usuario')";
 
         $query = mysqli_query($con, $sql);
@@ -100,12 +109,12 @@ class UsuarioP
         include('../modelo/conexiondb.php');
         $con = conection();
 
-        $sql = "UPDATE usuario 
+        $sql = "UPDATE usuarios 
                 SET nombre = '$nombre', 
                     apellido = '$apellido', 
                     email = '$email', 
                     password = '$password', 
-                    tipo_user = '$tipo_usuario' 
+                    tipo_usuario = '$tipo_usuario' 
                 WHERE id_user = '$id_user'";
 
         $query = mysqli_query($con, $sql);

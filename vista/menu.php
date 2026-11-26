@@ -1,4 +1,8 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$nombre_comensal = $_SESSION['nombre'] ?? 'Comensal';
 $mensaje = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reservar'])) {
     $nombre = $_POST['nombre'] ?? '';
@@ -27,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reservar'])) {
    
     <h1 style="text-align: center; color: #6f4e37; margin-top: 20px;">☕ Menu de Little Bean Coffee </h1>
     
-    <p style="text-align: center; color: #555;">Bienvenido comensal , consulta nuestra carta de especialidades y aparta tu mesa.</p>
+    <p style="text-align: center; color: #555;">Bienvenido comensal <strong><?= htmlspecialchars($nombre_comensal) ?></strong>, consulta nuestra carta de especialidades y aparta tu mesa.</p>
 
 <br>    
 

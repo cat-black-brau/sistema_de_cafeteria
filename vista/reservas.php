@@ -1,29 +1,25 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include('../modelo/conexiondb.php');
 $con = conection();
 
-// Crea la tabla automaticamente en la base de datos si aun no existe
-$sql_tabla = "CREATE TABLE IF NOT EXISTS reservaciones (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100),
-    fecha DATE,
-    hora TIME,
-    personas INT,
-    area VARCHAR(50),
-    estado VARCHAR(50) DEFAULT 'Confirmada'
-)";
-mysqli_query($con, $sql_tabla);
+// Obtener el ID del usuario logueado en la sesion
+$id_user = $_SESSION['id_user'] ?? 1;
+$nombre_comensal = $_SESSION['nombre'] ?? '';
 
 $mensaje = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reservar'])) {
+    $id_usuario = !empty($_POST['id_user']) ? $_POST['id_user'] : $id_user;
     $nombre = $_POST['nombre'] ?? '';
     $fecha = $_POST['fecha'] ?? '';
     $hora = $_POST['hora'] ?? '';
     $personas = $_POST['personas'] ?? '';
     $area = $_POST['area'] ?? '';
 
-    $sql_insert = "INSERT INTO reservaciones (nombre, fecha, hora, personas, area, estado) 
-                   VALUES ('$nombre', '$fecha', '$hora', '$personas', '$area', 'Confirmada')";
+    $sql_insert = "INSERT INTO reservaciones (id_user, nombre, fecha, hora, personas, area, estado) 
+                   VALUES ('$id_usuario', '$nombre', '$fecha', '$hora', '$personas', '$area', 'Confirmada')";
     $res = mysqli_query($con, $sql_insert);
 
     if ($res) {
@@ -72,9 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reservar'])) {
             <div class="card-body">
                 <form method="POST" action="reservas.php">
                     <input type="hidden" name="reservar" value="1">
+                    <!-- ID del usuario se manda automaticamente como llave foranea -->
+                    <input type="hidden" name="id_user" value="<?= $id_user ?>">
                     
                     <label class="form-label">Nombre del Comensal</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="Tu nombre completo" required/><br>
+                    <input type="text" class="form-control" name="nombre" value="<?= htmlspecialchars($nombre_comensal) ?>" placeholder="Tu nombre completo" required/><br>
 
                     <label class="form-label">Fecha de Visita</label>
                     <input type="date" class="form-control" name="fecha" value="<?= date('Y-m-d') ?>" required/><br>
